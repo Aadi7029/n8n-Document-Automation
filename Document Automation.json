@@ -1,0 +1,350 @@
+{
+  "name": "Document Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1MOa2k-kK7NZyvFTKj3kVgp1DgTfQ90NUKWgLNdWpJzI",
+          "mode": "list",
+          "cachedResultName": "SIMPLE REPORT",
+          "cachedResultUrl": "https://docs.google.com/document/d/1MOa2k-kK7NZyvFTKj3kVgp1DgTfQ90NUKWgLNdWpJzI/edit?usp=drivesdk"
+        },
+        "name": "=Report - {{ $('Collect User Data').item.json.body[0].body.name }}",
+        "sameFolder": false,
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "id": "ea539a3a-82e2-4246-bfa2-72faf429bcc8",
+      "name": "Google Drive - Copy Template",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        380,
+        -200
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "UdXRurQnLMx2oxd2",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "simple": false,
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{{name}}",
+              "replaceText": "={{ $('Collect User Data').item.json.body[0].body.name }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{email}}",
+              "replaceText": "={{ $('Collect User Data').item.json.body[0].body.email }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{purpose}}",
+              "replaceText": "={{ $('Collect User Data').item.json.body[0].body.purpose }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{summary}}",
+              "replaceText": "={{ $('AI Agent– Fill in Missing Fields').item.json.output.summary }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{recommendation}}",
+              "replaceText": "={{ $('AI Agent– Fill in Missing Fields').item.json.output.recommendation }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{date}}",
+              "replaceText": "={{ $('AI Agent– Fill in Missing Fields').item.json.output.date }}"
+            }
+          ]
+        }
+      },
+      "id": "e34b996c-e1f8-4d9e-87a2-9f8944f1fb78",
+      "name": "Google Docs - Replace Placeholders",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -140
+      ],
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "caEzUFWTWuYbj6sf",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.documentId }}",
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            }
+          },
+          "fileName": "={{ $('Google Drive - Copy Template').item.json.name }}.docx"
+        }
+      },
+      "id": "a4712780-b71a-4cfa-8995-9e731a71e4b8",
+      "name": "Google Drive - Download as DOCX",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        820,
+        -120
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "UdXRurQnLMx2oxd2",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Google Drive - Download as DOCX').item.json.documentId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "aff3f3ba-96d1-4915-ba51-33cf80995fe4",
+      "name": "Google Drive - Delete Temp File",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1220,
+        -80
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "UdXRurQnLMx2oxd2",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "aditya1mishra23@gmail.com",
+        "subject": "=Your AI-Powered Report - {{ $('Collect User Data').item.json.body[0].body.purpose }}",
+        "message": "=Hi, {{ $('Collect User Data').item.json.body[0].body.name }},<br/> Please find your generated report attached. Let us know if you need any changes.<br/> Best Wishes,<br/> Your Automation Team",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1020,
+        -100
+      ],
+      "id": "c29df8e4-a6fd-4da4-b5d3-d8229f2e0e33",
+      "name": "Send a message",
+      "webhookId": "ec2577ec-c519-4645-b4cd-f75757f23489",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Sz6XeB1O96fE4Twr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-doc",
+        "options": {}
+      },
+      "id": "9b3ef1b6-2418-4472-a701-e4f570dd1790",
+      "name": "Collect User Data",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -200
+      ],
+      "webhookId": "edd0f115-f15e-4799-ba48-a17d69164faa"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Based on this user input, fill in the missing fields like summary and recommendation.\n\nUser input:\n\nName: {{ $json.body[0].body.name }}\n\nEmail: {{ $json.body[0].body.email }}\n\nPurpose: {{ $json.body[0].body.purpose }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -260
+      ],
+      "id": "11ebcb2a-4743-4aaa-85fd-e43a8bbf006b",
+      "name": "AI Agent– Fill in Missing Fields"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"date\": {\n      \"type\": \"string\",\n      \"description\": \"Current date for the document\"\n    },\n    \"summary\": {\n      \"type\": \"string\",\n      \"description\": \"Executive summary of the document content\"\n    },\n    \"recommendation\": {\n      \"type\": \"string\",\n      \"description\": \"Strategic recommendations based on the analysis\"\n    }\n  },\n  \"required\": [\"date\", \"summary\", \"recommendation\"],\n  \"additionalProperties\": false\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        0
+      ],
+      "id": "8ab3d24e-2dae-462d-9e14-f7ad068b42ff",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        0
+      ],
+      "id": "d7f7ddf5-2b78-439b-a5ec-824a77726722",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Z8y8BtCQQVQu4AwP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive - Copy Template": {
+      "main": [
+        [
+          {
+            "node": "Google Docs - Replace Placeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs - Replace Placeholders": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - Download as DOCX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive - Download as DOCX": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - Delete Temp File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect User Data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent– Fill in Missing Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent– Fill in Missing Fields",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent– Fill in Missing Fields": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - Copy Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent– Fill in Missing Fields",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f00df9f0-f90a-46db-be21-0d71723d43b0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "890660c9155e9012ca8ee2a24b6448f414220a2eb44e63930fcc4f8ef6dd4f1f"
+  },
+  "id": "cokCBLKaixERi007",
+  "tags": []
+}
