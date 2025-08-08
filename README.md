@@ -14,24 +14,24 @@ This project streamlines document generation by:
 It’s designed to be **modular, scalable**, and **fully automated**, using n8n as the core orchestrator.
 
 ---
-## About This Project
+# About This Project
 
 The project aims to automate the generation of business documents (specifically, contract proposals) and their distribution via email, using AI in combination with workflow automation tools. The core automation is accomplished using n8n (an open-source workflow automation platform) and Google Gemini’s AI technology. The goal is to reduce manual effort, improve consistency, and scale document management workflows efficiently.
 
-# Main Components and Workflow: 
+## Main Components and Workflow: 
 - Information Collection
 - User or client project details are collected via a trigger (like an online form or Google Sheet). This kickstarts the automation.
 
-# AI-Powered Drafting: 
+## AI-Powered Drafting: 
 - The collected information is passed to an AI agent (Google Gemini/GPT-4), which generates a draft of the required proposal,    ensuring all important aspects (scope, deliverables, pricing, timelines) are covered accurately.
 
-# Template Merging: 
+## Template Merging: 
 - The AI-generated draft is inserted into a standard, professional template (Google Docs or PDF), with correct formatting and branding.
 
-# Contextual Retrieval: 
+## Contextual Retrieval: 
 _ The system can recall relevant sections (such as previous clauses, policies, or best practices) using embeddings and vector stores, making the proposals more contextually accurate.
 
-# Automated Email Dispatch: 
+## Automated Email Dispatch: 
 - Once the documents are generated and reviewed, n8n automatically sends them as attachments to the desired recipients using Gmail or other email APIs.
 
 
@@ -92,7 +92,7 @@ Copy `.env.example` to `.env` and configure your secrets (e.g., OpenAI/Gemini ke
 
 - Log into your self-hosted n8n instance.
 - Go to **Workflows** > **Import from File**.
-- Upload workflows from the `/workflows` folder.
+- Upload workflows from the `/workflows(.json)` folder.
 
 ### 4. Start the Server
 
