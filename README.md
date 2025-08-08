@@ -1,6 +1,6 @@
 # 📄 Document Automation with n8n
 
-This repository contains the workflows and supporting assets for a **Document Automation** system built using **n8n** (self-hosted via the [n8n Starter Kit](https://github.com/n8n-io/n8n-starter)).
+This repository contains the workflows and supporting assets for a **Document Automation** system built using **n8n** (self-hosted via the [n8n Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit)).
 
 ## 🚀 Overview
 
@@ -96,7 +96,7 @@ Copy `.env.example` to `.env` and configure your secrets (e.g., OpenAI/Gemini ke
 
 ### 4. Start the Server
 
-Ensure your [n8n starter kit](https://github.com/n8n-io/n8n-starter) is running:
+Ensure your [n8n starter kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) is running:
 
 ```bash
 docker-compose up -d
